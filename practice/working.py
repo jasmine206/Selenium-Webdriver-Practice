@@ -13,11 +13,6 @@ from selenium.common.exceptions import *
 
 class Working:
     def login_facebook(self, driver):
-        # driver_chrome_location = "/Users/gotit/Downloads/chromedriver"
-        # os.environ["webdriver.chrome.driver"] = driver_chrome_location
-        # driver = webdriver.Chrome(driver_chrome_location)
-        # baseUrl = "https://expert-excel.got-it.io/"
-        # driver.get(baseUrl)
         driver.implicitly_wait(3)
 
         parent_handle = driver.current_window_handle
@@ -29,10 +24,12 @@ class Working:
         # Click on LOG IN WITH FACEBOOK button
         driver.find_element(By.XPATH, '//*[@id="navbar"]/ul/li/div/div/span/button').click()
 
+        # Window handling
         handles = driver.window_handles
 
         for handle in handles:
             if handle not in parent_handle:
+                # Switch to Facebook window
                 driver.switch_to.window(handle)
                 email = driver.find_element(By.ID, 'email')
                 email.send_keys('honghaijumili206@gmail.com')
@@ -43,10 +40,13 @@ class Working:
                 # Click on Log in button
                 driver.find_element(By.ID, 'u_0_0').click()
 
+        # Switch back to Excelchat Window
         driver.switch_to.window(parent_handle)
+
         # Click on SKIP button from Welcome page
         time.sleep(5)
         driver.find_element(By.XPATH, '//*[@id="js-introSkip"]').click()
+
         # Click on START WORKING button
         time.sleep(5)
         driver.refresh()
@@ -107,7 +107,6 @@ def log_in_API():
 
     response = requests.post(url_login, headers=headers_login, data=json.dumps(data_login))
     response_data = response.json()
-    # print(response_data['data']['access_token'])
     return response_data['data']['access_token']
 
 
@@ -129,9 +128,7 @@ def post_question_API():
         'text': '[Jasmine] I need a formula to combine column C with the numbers in columns L10 to L20'
     }
 
-    response = requests.post(url_post, headers=headers_post, data=data_post)
-    response_data = response.json()
-    print(response.status_code)
+    requests.post(url_post, headers=headers_post, data=data_post)
 
 
 if __name__ == "__main__":
