@@ -5,108 +5,105 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from practice_2.driver import GetDriver
+from practice_2.config import Config
 
 
 class ExpertPortal:
-    login_landing_btn_css = "#navbar .navbar-btn"
-    login_with_fb_btn_css = "#navbar .btn-facebook"
-    email_id = 'email'
-    password_id = 'pass'
-    login_fb_btn_id = 'u_0_0'
-
-    skip_welcome_btn_id = 'js-introSkip'
-
-    start_working_btn_css = ".expert-home-right .link-item"
-
-    question_text_css = '.gi-BiddingQuestion li:nth-child(2) .gi-BiddingQuestionInfo-text'
-    skip_btn_id = 'skip-button'
-    first_skip_reason_radio_css = '#skip-reasons div:nth-child(1) .gi-InputCustom--radio'
-    submit_skip_btn_id = 'confirm-skip-button'
-
-    claim_btn_id = 'claim-button'
-    bid_btn_id = 'confirm-claim-button'
-    chat_field_id = 'composer-attach-file-button'
-    messages_list_css = ".Pane.vertical.Pane1 .chat-message"
-    driver = GetDriver().get_driver()
+    def __init__(self):
+        self.driver = GetDriver().get_driver(Config.EXPERT_BASE_URL)
 
     def login_facebook(self, email, password):
-        parent_handle = ExpertPortal.driver.current_window_handle
+        parent_handle = self.driver.current_window_handle
 
         # Click on LOG IN button from landing page
-        ExpertPortal.driver.find_element(By.CSS_SELECTOR, ExpertPortal.login_landing_btn_css).click()
+        self.driver.find_element(By.CSS_SELECTOR, Config.LOGIN_LANDING_BTN_CSS).click()
 
         time.sleep(3)
         # Click on LOG IN WITH FACEBOOK button
-        ExpertPortal.driver.find_element(By.CSS_SELECTOR, ExpertPortal.login_with_fb_btn_css).click()
+        self.driver.find_element(By.CSS_SELECTOR, Config.LOGIN_WITH_FB_BTN_CSS).click()
 
         # Window handling
-        handles = ExpertPortal.driver.window_handles
+        handles = self.driver.window_handles
         for handle in handles:
             if handle != parent_handle:
-                ExpertPortal.driver.switch_to.window(handle)
-                current_url = ExpertPortal.driver.current_url
+                self.driver.switch_to.window(handle)
+                current_url = self.driver.current_url
                 expect_url = "https://www.facebook.com"
                 if current_url[:len(expect_url)] == expect_url:
                     # Input Facebook account
-                    email_field = ExpertPortal.driver.find_element(By.ID, ExpertPortal.email_id)
+                    email_field = self.driver.find_element(By.ID, Config.EMAIL_ID)
                     email_field.send_keys(email)
-                    password_field = ExpertPortal.driver.find_element(By.ID, ExpertPortal.password_id)
+                    password_field = self.driver.find_element(By.ID, Config.PASSWORD_ID)
                     password_field.send_keys(password)
+                    break
 
         # Click on Log in button
-        ExpertPortal.driver.find_element(By.ID, ExpertPortal.login_fb_btn_id).click()
+        self.driver.find_element(By.ID, Config.LOGIN_FB_BTN_ID).click()
         # Switch back to Excelchat Window
-        ExpertPortal.driver.switch_to.window(parent_handle)
+        self.driver.switch_to.window(parent_handle)
 
         time.sleep(3)
         # Click on SKIP button from Welcome page
-        ExpertPortal.driver.find_element(By.ID, ExpertPortal.skip_welcome_btn_id).click()
+        self.driver.find_element(By.ID, Config.SKIP_WELCOME_BTN_ID).click()
 
     def start_working(self):
         time.sleep(3)
         # Click on START WORKING button
-        ExpertPortal.driver.find_element(By.CSS_SELECTOR, ExpertPortal.start_working_btn_css).click()
+        self.driver.find_element(By.CSS_SELECTOR, Config.START_WORKING_BTN_CSS).click()
 
     def skip_question(self):
+        time.sleep(3)
         # Click on SKIP button
-        ExpertPortal.driver.find_element(By.ID, ExpertPortal.skip_btn_id).click()
+        self.driver.find_element(By.ID, Config.SKIP_BTN_ID).click()
         # Select 1st skip reason
-        ExpertPortal.driver.find_element(By.CSS_SELECTOR, ExpertPortal.first_skip_reason_radio_css).click()
+        self.driver.find_element(By.CSS_SELECTOR, Config.FIRST_SKIP_REASON_RADIO_CSS).click()
         # Submit skip to be back working screen
         time.sleep(3)
-        ExpertPortal.driver.find_element(By.ID, ExpertPortal.submit_skip_btn_id).click()
+        self.driver.find_element(By.ID, Config.SUBMIT_SKIP_BTN_ID).click()
         time.sleep(3)
 
     def claim_question(self):
         # Click on CLAIM button
-        ExpertPortal.driver.find_element(By.ID, ExpertPortal.claim_btn_id).click()
+        self.driver.find_element(By.ID, Config.CLAIM_BTN_ID).click()
 
         time.sleep(3)
         # Click on BID button
-        ExpertPortal.driver.find_element(By.ID, ExpertPortal.bid_btn_id).click()
+        self.driver.find_element(By.ID, Config.BID_BTN_ID).click()
 
-    def wait_question_by_description(self, posted_question):
+    def wait_to_claim_question_by_title(self, posted_question):
+        # verify to see bidding screen
         # Wait until meet a question
-        wait = WebDriverWait(ExpertPortal.driver, 1200, poll_frequency=1)
-        wait.until(EC.element_to_be_clickable((By.ID, ExpertPortal.claim_btn_id)))
-        question = ExpertPortal.driver.find_element(By.CSS_SELECTOR, ExpertPortal.question_text_css)
+        wait = WebDriverWait(self.driver, 100, poll_frequency=1)
+        wait.until(EC.element_to_be_clickable((By.ID, Config.CLAIM_BTN_ID)))
+        question = self.driver.find_element(By.CSS_SELECTOR, Config.QUESTION_TEXT_CSS)
 
         while question.text != posted_question:
             self.skip_question()
             time.sleep(5)
-            wait.until(EC.element_to_be_clickable((By.ID, ExpertPortal.claim_btn_id)))
-            time.sleep(3)
+            wait.until(EC.element_to_be_clickable((By.ID, Config.CLAIM_BTN_ID)))
+            question = self.driver.find_element(By.CSS_SELECTOR, Config.QUESTION_TEXT_CSS)
         self.claim_question()
 
         # Wait until get in chat session
-        wait.until(EC.element_to_be_clickable((By.ID, ExpertPortal.chat_field_id)))
+        # wait.until(EC.element_to_be_clickable((By.ID, Config.CHAT_FIELD_ID)))
+
+    def check_be_in_session(self):
+        time.sleep(30)
+        chat_field = self.driver.find_element(By.ID, Config.CHAT_FIELD_ID)
+        if chat_field is not None:
+            return True
+        else:
+            return False
 
     def check_message(self, sent_message):
-        wait = WebDriverWait(ExpertPortal.driver, 10, poll_frequency=1)
-        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ExpertPortal.messages_list_css)))
-        messages_list = ExpertPortal.driver.find_elements(By.CSS_SELECTOR, ExpertPortal.messages_list_css)
+        time.sleep(3)
+        wait = WebDriverWait(self.driver, 15, poll_frequency=1)
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, Config.MESSAGES_LIST_CSS)))
+        messages_list = self.driver.find_elements(By.CSS_SELECTOR, Config.MESSAGES_LIST_CSS)
         len_msg_list = len(messages_list)
-        assert (messages_list[len_msg_list-1].text == sent_message), "Expert has not seen asker's API message"
-        return "Expert has seen asker's API message"
+        if messages_list[len_msg_list-1].text == sent_message:
+            return True
+        else:
+            return False
 
 
