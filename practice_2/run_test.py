@@ -18,6 +18,7 @@ class RunTest:
         assert (expert.check_be_in_session()), "Expert has lost the question"
         asker.send_message(asker.problem_id, Config.ASKER_MESSAGE)
         assert (expert.check_message(Config.ASKER_MESSAGE)), "Expert has not seen asker's API message"
+        time.sleep(3)
 
 
 if __name__ == "__main__":

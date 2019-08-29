@@ -91,11 +91,8 @@ class ExpertPortal:
     def check_be_in_session(self):
         time.sleep(30)
         try:
-            chat_field = self.driver.find_element(By.ID, Config.CHAT_FIELD_ID)
-            if chat_field is not None:
-                return True
-            else:
-                return False
+            self.driver.find_element(By.ID, Config.CHAT_FIELD_ID)
+            return True
         except NoSuchElementException:
             return False
 
