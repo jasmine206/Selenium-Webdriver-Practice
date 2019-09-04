@@ -2,17 +2,10 @@ import json
 
 import requests
 
+from seleniumpractice.config import Config
+
 
 class AskerAPI:
-    headers = {
-        'Origin': 'https://www.got-it.io',
-        'X-GotIt-Product': 'excelchat',
-        'Content-Type': 'application/json',
-        'X-GotIt-Site': 'excelchat',
-        'X-GotIt-Vertical': 'excel'
-    }
-    base_url = 'https://api.got-it.io/'
-
     def __init__(self):
         self.problem_id = None
 
@@ -31,12 +24,12 @@ class AskerAPI:
             }
         }
         data_login.update({'email': email, 'password': password})
-        response = requests.post(self.base_url + 'log-in/asker/email', headers=self.headers, data=json.dumps(data_login))
+        response = requests.post(Config.base_url + 'log-in/asker/email', headers=Config.headers,
+                                 data=json.dumps(data_login))
         response_data = response.json()
-
         access_token = response_data['data']['access_token']
-        AskerAPI.headers.update({'Authorization': 'Bearer ' + access_token})
-        AskerAPI.headers.pop('Content-Type')
+        Config.headers.update({'Authorization': 'Bearer ' + access_token})
+        Config.headers.pop('Content-Type')
 
     def post_question(self, subject_id, question):
         data_post = {
@@ -44,13 +37,14 @@ class AskerAPI:
             'text': question
         }
         # Asker posts question using API
-        post_response = requests.post(AskerAPI.base_url + 'askers/me/problems', headers=AskerAPI.headers, data=data_post)
+        post_response = requests.post(Config.base_url + 'askers/me/problems', headers=Config.headers, data=data_post)
         post_response_json = post_response.json()
         self.problem_id = post_response_json['data']['id']
 
+    # Content-type must have in headers
     def send_message(self, problem_id, message):
         data_send = {
             'message': message,
             'explanation_id': problem_id
         }
-        requests.post(AskerAPI.base_url + 'askers/me/explanation_messages', headers=AskerAPI.headers, data=data_send)
+        requests.post(Config.base_url + 'askers/me/explanation_messages', headers=Config.headers, data=data_send)
