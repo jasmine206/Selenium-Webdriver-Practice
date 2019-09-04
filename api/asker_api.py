@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from seleniumpractice.config import Config
+from config import Config
 
 
 class AskerAPI:

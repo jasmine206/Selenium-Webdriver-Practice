@@ -1,6 +1,4 @@
-# Edit name to Driver
 # Custom implicit wait, find element here
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -12,7 +10,6 @@ class Driver:
     def get_element(self, locator_type, locator):
         element = None
         try:
-            # locator_type = locator_type.lower()
             element = self.driver.find_element(locator_type, locator)
         except:
             print("Element not found")
