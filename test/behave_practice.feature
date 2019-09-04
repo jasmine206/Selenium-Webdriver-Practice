@@ -1,7 +1,7 @@
 Feature: Expert claims question
 
   Background:
-    Given I am at homepage
+    Given I am at landing page
 
   @chrome.browser
   Scenario: Expert claims question and receive message

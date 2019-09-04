@@ -4,7 +4,7 @@ from pom.expert_portal import *
 from config import Config
 
 
-@given("I am at homepage")
+@given("I am at landing page")
 def step_impl(context):
     context.browser.get(Config.EXPERT_BASE_URL)
 
