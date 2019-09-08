@@ -1,4 +1,6 @@
-# Custom implicit wait, find element here
+import sys
+import time
+
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -77,6 +79,16 @@ class Driver:
 
     def switch_to_window(self, handle):
         self.driver.switch_to.window(handle)
+
+    def take_screenshot(self, step, scenario):
+        file_name = "Screenshot_" + "_" + str(scenario) + str(step) + "_" + str(round(time.time())) + ".png"
+        screen_directory = "../Selenium-Webdriver-Practice/test/screenshots/"
+        destination_file = screen_directory + file_name
+
+        try:
+            self.driver.save_screenshot(destination_file)
+        except NotADirectoryError:
+            print("Something went wrong")
 
 
 
