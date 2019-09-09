@@ -2,23 +2,17 @@ import time
 
 from selenium.webdriver.common.by import By
 
-from driver import Driver
+from pom.expert_base import ExpertBase
 
 
-class LandingPage:
-    def __init__(self, driver):
-        self.driver = Driver(driver)
+class LandingPage(ExpertBase):
+    login_landing_btn_css = "#navbar .navbar-btn"
+    login_with_fb_btn_css = "#navbar .btn-facebook"
 
-        self.login_landing_btn_css = "#navbar .navbar-btn"
-        self.login_with_fb_btn_css = "#navbar .btn-facebook"
-
-    def login_facebook(self):
+    def click_login_facebook(self):
         parent_handle = self.driver.get_current_window_handle()
+        self.driver.wait_then_click_element(self.login_landing_btn_css, By.CSS_SELECTOR)
 
-        # Click on LOG IN button from landing page
-        self.driver.wait_then_click_element(By.CSS_SELECTOR, self.login_landing_btn_css)
-
-        # Click on LOG IN WITH FACEBOOK button
         time.sleep(1)
-        self.driver.wait_then_click_element(By.CSS_SELECTOR, self.login_with_fb_btn_css)
+        self.driver.wait_then_click_element(self.login_with_fb_btn_css, By.CSS_SELECTOR, )
         return parent_handle
