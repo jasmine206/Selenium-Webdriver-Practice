@@ -22,14 +22,6 @@ class Config:
     ASKER_EXCEL_FILE_PATH = '../Selenium-Webdriver-Practice/files/YSL.xlsx'
 
     # Admin
-    headers_admin = {
-        'Origin': 'https://www.got-it.io',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjMzOGNiN2Y0IiwiaWF0IjoxNTYyMDQzNjg'
-                         '2LCJzdWIiOjg4LCJleHAiOjE1OTM1Nzk2ODYsImF1ZCI6ImFkbWluIn0.dB9YLRNozvu-Kwzr0rzaneYG8uvs9Xn1l'
-                         'j9eirWT8ak',
-        'Content-Type': 'application/json',
-        'X-GotIt-Vertical': 'excel'
-    }
     base_url_admin = 'https://api.got-it.io/admin'
 
     # Directory files
