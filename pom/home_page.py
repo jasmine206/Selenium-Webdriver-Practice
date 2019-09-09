@@ -1,20 +1,15 @@
-import time
-
 from selenium.webdriver.common.by import By
 
-from driver import Driver
+from pom.expert_base import ExpertBase
 
 
-class HomePage:
-    def __init__(self, driver):
-        self.driver = Driver(driver)
-        self.skip_welcome_btn_id = 'js-introSkip'
+class HomePage(ExpertBase):
+    skip_welcome_btn_id = 'js-introSkip'
+    start_working_btn_css = ".expert-home-right .link-item"
 
-        self.start_working_btn_css = ".expert-home-right .link-item"
-
-    def start_working(self):
+    def click_start_working(self):
         # Click on SKIP button from Welcome page
-        self.driver.wait_then_click_element(By.ID, self.skip_welcome_btn_id)
+        self.driver.wait_then_click_element(self.skip_welcome_btn_id)
 
         # Click on START WORKING button
-        self.driver.wait_then_click_element(By.CSS_SELECTOR, self.start_working_btn_css)
+        self.driver.wait_then_click_element(self.start_working_btn_css, By.CSS_SELECTOR)

@@ -1,12 +1,12 @@
 from behave import fixture
 
-from driver_api import DriverAPI
+from selenium_driver import SeleniumDriver
 
 
 @fixture
 def get_browser(context):
     # Setup browser
-    context.browser = DriverAPI().get_chrome_browser()
+    context.browser = SeleniumDriver().get_chrome_browser()
 
     yield context.browser
 
